@@ -19,9 +19,9 @@ public class Principal{
         int numSondas = 3;
             
         Mars marte = new Mars(linhas,linhas,numSondas);
-        marte.adicionaJogador(0,0, 'N', 5);
+        marte.adicionaJogador(0,1, 'N', 5);
         marte.mostrePlaneta();
-        marte.moveSonda(0, 0, 0, 1, 1);
+        marte.processaInput('M', 5);  
         marte.mostrePlaneta();
     }
 }

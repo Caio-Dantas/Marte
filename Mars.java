@@ -1,11 +1,10 @@
-import java.util.Arrays;
 
 public class Mars {
 
     int[][] planeta;
     Sonda[] sondas;
     int sondasColocadas = 0;
-    char[] direcoesPossiveis = {'N', 'L', 'S', 'O'};
+    char[] direcoesPossiveis = {'N', 'E', 'S', 'W'};
     int[] codigosSondas;
 
     public void mostrePlaneta(){
@@ -19,15 +18,19 @@ public class Mars {
         System.out.println("---------------------------");
     }
 
-    public void adicionaJogador(int posX, int posY, char direcaoInicial, int codigo){
+    public void adicionaJogador(int posY, int posX, char direcaoInicial, int codigo){
         
+        int direcao, posXCartesiano;
+
+        direcao = getIndexChar(direcoesPossiveis, direcaoInicial);
+
         
-        //sondas[sondasColocadas - 1] = sondasColocadas;
-        int direcao = Arrays.binarySearch(direcoesPossiveis, direcaoInicial);
+        // Adaptação de uma abordagem matricial para uma abordagem cartesiana
+        posXCartesiano = planeta.length - posX - 1;
 
-        sondas[sondasColocadas] = new Sonda(codigo, posX, posY, direcao);
+        sondas[sondasColocadas] = new Sonda(codigo, posXCartesiano, posY, direcao);
 
-        planeta[posX][posY] = sondas[sondasColocadas].id;
+        planeta[posXCartesiano][posY] = sondas[sondasColocadas].id;
         codigosSondas[sondasColocadas] = codigo;
         
         
@@ -35,20 +38,65 @@ public class Mars {
     }
 
     public void processaInput(char direcao, int codigo){
-        int pos = Arrays.binarySearch(codigosSondas, codigo);
+        
+        int pos = getIndexInt(codigosSondas, codigo);
+        int[] movimento;
         Sonda novaSonda = sondas[pos];
-        if(direcao == 'E' || direcao == 'D'){
+        if(direcao == 'L' || direcao == 'R'){
             alteraDirecao(direcao, novaSonda);
         }
-        else if(direcao == 'F'){
-
+        else if(direcao == 'M'){
+            movimento = traduzOrdem(novaSonda);
+            moveSonda(novaSonda, movimento);
         }
+    }
+
+    public int[] traduzOrdem(Sonda sonda){
+        int indexDirecao;
+        char direcao;
+
+        indexDirecao = sonda.direcao;
+        direcao = direcoesPossiveis[indexDirecao];
+
+        switch(direcao){
+            case 'N':
+                return new int[] {-1,0};
+            case 'E':
+                return new int[] {0,1};
+            case 'S':
+                return new int[] {1,0};
+            case 'W':
+                return new int[] {0,-1};
+            default:
+                return new int[] {0,0};
+        }
+        
+    }
+
+    public int getIndexChar(char[] array, char key){
+        for(int i =0; i < array.length; i++){
+            if(array[i] == key){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int getIndexInt(int[] array, int key){
+        for(int i =0; i < array.length; i++){
+            if(array[i] == key){
+                return i;
+            }
+        }
+        return -1;
     }
 
 
     public void alteraDirecao(char novaDirecao, Sonda sonda){
+
         int direcao = sonda.direcao;
-        if(novaDirecao == 'D'){
+
+        if(novaDirecao == 'R'){
             direcao++;
             direcao = direcao % 4;
         }
@@ -65,9 +113,25 @@ public class Mars {
         planeta = new int[linhas][colunas];
     }
 
-    public void moveSonda(int indiceSonda, int posXAnterior, int posYAnterior, int posXNova, int posYNova){
-        planeta[posXAnterior][posYAnterior] = 0;
-        planeta[posXNova][posYNova] = sondas[indiceSonda].id;
+    public void moveSonda(Sonda sonda, int[] delta){
+        int novaPosX, novaPosY;
+
+        novaPosX = sonda.posicaoX + delta[0];
+        novaPosY = sonda.posicaoY + delta[1];
+
+        if(novaPosY < 0){
+            // Caso ultrapasse para esquerda move para a direita
+            novaPosY = planeta[0].length - 1;
+        }
+
+        planeta[sonda.posicaoX][sonda.posicaoY] = 0;
+        planeta[novaPosX][novaPosY] = sonda.id;
+        
+        sonda.posicaoX = novaPosX;
+        sonda.posicaoY = novaPosY;
+        
+
+
     }
 
     public Mars(int linhas, int colunas, int quantidadeSondas){
