@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Utils {
     /*
         Exibe o parâmetro passado no console.
@@ -22,15 +24,6 @@ public class Utils {
         return -1;
     }
 
-    static int getIndexInt(int[] array, int key){
-        for(int i =0; i < array.length; i++){
-            if(array[i] == key){
-                return i;
-            }
-        }
-        return -1;
-    }
-
     static void printMatriz(int[][] matriz){
         print("---------------------------");
         for (int i = 0; i < matriz.length; i++) {
@@ -41,13 +34,10 @@ public class Utils {
         }
         print("---------------------------");
     }
-    
-    static int[] push(int[] array, int newElement){
-        int[] newArray = new int[array.length + 1];
-        for(int i = 0; i < array.length; i++){
-            newArray[i] = array[i];
-        }
-        newArray[array.length] = newElement;
-        return newArray;
+
+    static boolean conseguiuEscapar(){
+        Random rand = new Random();
+        return rand.nextBoolean();
     }
+
 }

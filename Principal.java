@@ -6,8 +6,8 @@ public class Principal{
             
         Mars marte = new Mars(linhas,linhas);
         marte.adicionaSonda(1,0, 'S', 5);
-        marte.mostrePlaneta();
-        marte.processaInput('M', 5);  
+        marte.adicionaSonda(0,0, 'E', 7);
+        marte.processaInput('M', 7);
         marte.mostrePlaneta();
     }
 }

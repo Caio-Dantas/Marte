@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import jdk.jshell.execution.Util;
+
 public class Mars {
 
     int[][] planeta;
@@ -117,8 +119,35 @@ public class Mars {
     Define a nova posição da sonda com base em um array de 2 posições passado contendo o deslocamento a ser realizado.
     */
     public void moveSonda(Sonda sonda, int[] delta){
-        int novaPosX, novaPosY;
 
+        // A sonda sai da posição anterior
+        planeta[sonda.posicaoX][sonda.posicaoY] = 0;
+
+        geraNovaPosicao(sonda, delta);
+
+        if(planeta[sonda.posicaoX][sonda.posicaoY] == 0){
+            planeta[sonda.posicaoX][sonda.posicaoY] = sonda.id;
+        }
+        else{
+            Utils.print("ERRO");
+            Utils.print("HOUVE UMA COLISÃO!");
+            Utils.print("ABORTAR MISSÂO");
+            if(Utils.conseguiuEscapar()){
+                Utils.print("O PILOTO DESVIOU E SAIU ILESO");
+                geraNovaPosicao(sonda, delta);
+                planeta[sonda.posicaoX][sonda.posicaoY] = sonda.id;
+            }
+            else{
+                Utils.print("PERDEMOS A COMUNICAÇÃO DA SONDA " + sonda.id + " E DA SONDA " + planeta[sonda.posicaoX][sonda.posicaoY]);
+                planeta[sonda.posicaoX][sonda.posicaoY] = 0;
+            }
+        }
+
+
+    }
+
+    public void geraNovaPosicao(Sonda sonda, int[] delta){
+        int novaPosX, novaPosY;
         novaPosX = sonda.posicaoX + delta[0];
         novaPosY = sonda.posicaoY + delta[1];
 
@@ -139,15 +168,9 @@ public class Mars {
             novaPosX = 0;
         }
 
-
-        planeta[sonda.posicaoX][sonda.posicaoY] = 0;
-        planeta[novaPosX][novaPosY] = sonda.id;
-
         sonda.posicaoX = novaPosX;
         sonda.posicaoY = novaPosY;
-
     }
-
 
     /*
     Construtor: Mars
