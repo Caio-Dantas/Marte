@@ -18,8 +18,8 @@ public class Principal{
         Mars marte = new Mars(colunas, linhas);
 
         while(conexaoSondas){
+
             System.out.println("Insira o comando que deseja executar: (adicionar, mover, mostrar, sair)");
-            
             comando = scan.next();
             
             if(comando.equalsIgnoreCase("adicionar")){
@@ -55,10 +55,7 @@ public class Principal{
                 conexaoSondas = false;
             }
             
-            
-
         }   
-        
         scan.close();
     }
 }
