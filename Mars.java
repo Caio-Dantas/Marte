@@ -1,15 +1,13 @@
 import java.util.ArrayList;
-import java.util.List;
 
-import jdk.jshell.execution.Util;
 
 public class Mars {
 
     int[][] planeta;
     char[] direcoesPossiveis = {'N', 'E', 'S', 'W'};
     
-    List<Integer> codigosSondas = new ArrayList<Integer>();
-    List<Sonda> sondas = new ArrayList<Sonda>();
+    ArrayList<Integer> codigosSondas = new ArrayList<Integer>();
+    ArrayList<Sonda> sondas = new ArrayList<Sonda>();
 
     /*
     Função: mostrePlaneta
@@ -21,23 +19,39 @@ public class Mars {
 
     /*
     Função: adicionaSonda
-    Adiciona uma nova sonda no planeta que se encontra na posição passada em coordenadas cartesianas.
+    Adiciona uma nova sonda no planeta que se encontra na posição passada em coordenadas cartesianas,
+    caso a posição e o código da sonda sejam válidas.
     */
     public void adicionaSonda(int coordenadaX, int coordenadaY, char direcaoInicial, int codigo){
-
+        
         int posX, posY, direcao, posXCartesiano;
+
         posX = coordenadaY;
         posY = coordenadaX;
 
-        direcao = Utils.getIndexChar(direcoesPossiveis, direcaoInicial);
-        
         // Adaptação de uma abordagem matricial para uma abordagem cartesiana
         posXCartesiano = planeta.length - posX - 1;
+        
+        if(codigosSondas.indexOf(codigo) >= 0){
+            Utils.print("Já existe uma sonda com esse código.");
+            return;
+        }
+
+        direcao = Utils.getIndexChar(direcoesPossiveis, direcaoInicial);
+        if(direcao < 0){
+            Utils.print("Adicione uma direção válida.");
+            return;
+        }
+
+        if(planeta[posXCartesiano][posY] == 0){
+            planeta[posXCartesiano][posY] = codigo;
+        }
+        else{
+            Utils.print("Já existe uma sonda nessa posição.");
+            return;
+        }
 
         sondas.add(new Sonda(codigo, posXCartesiano, posY, direcao));
-
-        planeta[posXCartesiano][posY] = codigo;
-        
         codigosSondas.add(codigo);
     }
 
@@ -47,15 +61,25 @@ public class Mars {
     */
     public void processaInput(char direcao, int codigo){
         
-        int pos = codigosSondas.indexOf(codigo);
         int[] movimento;
-        Sonda novaSonda = sondas.get(pos);
+        int pos;
+        Sonda novaSonda;
+
+        pos = codigosSondas.indexOf(codigo);
+        if(pos < 0){
+            Utils.print("Insira um código válido ou adicione uma nova sonda.");
+            return;
+        }
+        novaSonda = sondas.get(pos);
         if(direcao == 'L' || direcao == 'R'){
             alteraDirecao(direcao, novaSonda);
         }
         else if(direcao == 'M'){
             movimento = traduzComando(novaSonda);
             moveSonda(novaSonda, movimento);
+        }
+        else{
+            Utils.print("Insira uma direção válida.");
         }
     }
 
@@ -64,6 +88,7 @@ public class Mars {
     Retorno um array de duas posições contendo o deslocamento que deve ser feito em cada um dos eixos com base na direção atual da sonda.
     */
     public int[] traduzComando(Sonda sonda){
+
         int indexDirecao;
         char direcao;
 
@@ -142,12 +167,16 @@ public class Mars {
                 planeta[sonda.posicaoX][sonda.posicaoY] = 0;
             }
         }
-
-
     }
 
+    /*
+    Função: geraNovaPosicao
+    Define uma nova localização dentro do planeta com base na posição anterior e no deslocamento a ser feito.
+    */
     public void geraNovaPosicao(Sonda sonda, int[] delta){
+
         int novaPosX, novaPosY;
+
         novaPosX = sonda.posicaoX + delta[0];
         novaPosY = sonda.posicaoY + delta[1];
 
@@ -174,7 +203,6 @@ public class Mars {
 
     /*
     Construtor: Mars
-    -------------------
     Construtor da classe Mars, exige a quantidade de linhas e colunas do planeta e a quantidade de sondas presentes no planeta.
     */
     public Mars(int linhas, int colunas){
