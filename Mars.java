@@ -8,38 +8,27 @@ public class Mars {
     int[] codigosSondas;
 
     public void mostrePlaneta(){
-        System.out.println("---------------------------");
-        for (int i = 0; i < planeta.length; i++) {
-            for (int j = 0; j < planeta[i].length; j++) {
-                System.out.print(planeta[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("---------------------------");
+        Utils.printMatriz(planeta);
     }
 
     public void adicionaJogador(int posY, int posX, char direcaoInicial, int codigo){
         
         int direcao, posXCartesiano;
 
-        direcao = getIndexChar(direcoesPossiveis, direcaoInicial);
-
+        direcao = Utils.getIndexChar(direcoesPossiveis, direcaoInicial);
         
         // Adaptação de uma abordagem matricial para uma abordagem cartesiana
         posXCartesiano = planeta.length - posX - 1;
 
         sondas[sondasColocadas] = new Sonda(codigo, posXCartesiano, posY, direcao);
-
-        planeta[posXCartesiano][posY] = sondas[sondasColocadas].id;
+        planeta[posXCartesiano][posY] = codigo;
         codigosSondas[sondasColocadas] = codigo;
-        
-        
         sondasColocadas++;
     }
 
     public void processaInput(char direcao, int codigo){
         
-        int pos = getIndexInt(codigosSondas, codigo);
+        int pos = Utils.getIndexInt(codigosSondas, codigo);
         int[] movimento;
         Sonda novaSonda = sondas[pos];
         if(direcao == 'L' || direcao == 'R'){
@@ -73,25 +62,6 @@ public class Mars {
         
     }
 
-    public int getIndexChar(char[] array, char key){
-        for(int i =0; i < array.length; i++){
-            if(array[i] == key){
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public int getIndexInt(int[] array, int key){
-        for(int i =0; i < array.length; i++){
-            if(array[i] == key){
-                return i;
-            }
-        }
-        return -1;
-    }
-
-
     public void alteraDirecao(char novaDirecao, Sonda sonda){
 
         int direcao = sonda.direcao;
@@ -119,20 +89,32 @@ public class Mars {
         novaPosX = sonda.posicaoX + delta[0];
         novaPosY = sonda.posicaoY + delta[1];
 
+        // Caso ultrapasse para esquerda move para a última coluna
         if(novaPosY < 0){
-            // Caso ultrapasse para esquerda move para a direita
             novaPosY = planeta[0].length - 1;
         }
+        // Caso ultrapasse para direita move para a primeira coluna
+        else if(novaPosY > planeta[0].length - 1){
+            novaPosY = 0;
+        }
+        // Caso ultrapasse para cima move para a última linha
+        if(novaPosX < 0){
+            novaPosX = planeta.length - 1;
+        }
+        // Caso ultrapasse para baixo move para a primeria linha
+        if(novaPosX > planeta.length - 1){
+            novaPosX = 0;
+        }
+
 
         planeta[sonda.posicaoX][sonda.posicaoY] = 0;
         planeta[novaPosX][novaPosY] = sonda.id;
-        
+
         sonda.posicaoX = novaPosX;
         sonda.posicaoY = novaPosY;
-        
-
 
     }
+
 
     public Mars(int linhas, int colunas, int quantidadeSondas){
         sondas = new Sonda[quantidadeSondas];
