@@ -41,4 +41,13 @@ public class Utils {
         }
         print("---------------------------");
     }
+    
+    static int[] push(int[] array, int newElement){
+        int[] newArray = new int[array.length + 1];
+        for(int i = 0; i < array.length; i++){
+            newArray[i] = array[i];
+        }
+        newArray[array.length] = newElement;
+        return newArray;
+    }
 }
