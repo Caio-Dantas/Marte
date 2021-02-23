@@ -3,6 +3,20 @@ public class Sonda {
     int posicaoX;
     int posicaoY;
     int direcao;
+    boolean ativa = true;
+
+    public void desativaSonda(){
+        ativa = false;
+    }
+
+    public void alteraPosicao(int coordX, int coordY){
+        posicaoX = coordX;
+        posicaoY = coordY;
+    }
+    
+    public void alteraDirecao(int novaDirecao){
+        direcao = novaDirecao;
+    }
 
     /*
     Construtor: Sonda

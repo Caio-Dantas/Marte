@@ -6,16 +6,7 @@ public class Mars {
     int[][] planeta;
     char[] direcoesPossiveis = {'N', 'E', 'S', 'W'};
     
-    ArrayList<Integer> codigosSondas = new ArrayList<Integer>();
     ArrayList<Sonda> sondas = new ArrayList<Sonda>();
-
-    /*
-    Função: mostrePlaneta
-    Imprime no console o estado atual do planeta com as sondas posicionadas e informando o código de cada sonda.
-    */
-    public void mostrePlaneta(){
-        Utils.printMatriz(planeta);
-    }
 
     /*
     Função: adicionaSonda
@@ -32,7 +23,7 @@ public class Mars {
         // Adaptação de uma abordagem matricial para uma abordagem cartesiana
         posXCartesiano = planeta.length - posX - 1;
         
-        if(codigosSondas.indexOf(codigo) >= 0){
+        if(Utils.getSondaById(codigo, sondas).id != -1){
             Utils.print("Já existe uma sonda com esse código.");
             return;
         }
@@ -52,7 +43,6 @@ public class Mars {
         }
 
         sondas.add(new Sonda(codigo, posXCartesiano, posY, direcao));
-        codigosSondas.add(codigo);
     }
 
     /*
@@ -62,15 +52,17 @@ public class Mars {
     public void processaInput(char direcao, int codigo){
         
         int[] movimento;
-        int pos;
         Sonda novaSonda;
 
-        pos = codigosSondas.indexOf(codigo);
-        if(pos < 0){
+        novaSonda = Utils.getSondaById(codigo, sondas);
+        if(novaSonda.id == -1){
             Utils.print("Insira um código válido ou adicione uma nova sonda.");
             return;
         }
-        novaSonda = sondas.get(pos);
+        // Não processa os movimentos após a sonda ser desativada
+        if(!novaSonda.ativa){
+            return;
+        }
         if(direcao == 'L' || direcao == 'R'){
             alteraDirecao(direcao, novaSonda);
         }
@@ -128,15 +120,7 @@ public class Mars {
                 direcao = 3;
             }
         }
-        sonda.direcao = direcao;
-    }
-
-    /*
-    Função: prepararTerreno
-    Ajusta um array 2d conforme a quantidade de linhas e colunas passadas. Esse array será usado como uma base para os movimentos das sondas.
-    */
-    public void prepararTerreno(int linhas, int colunas){
-        planeta = new int[linhas][colunas];
+        sonda.alteraDirecao(direcao);
     }
 
     /*
@@ -145,7 +129,8 @@ public class Mars {
     */
     public void moveSonda(Sonda sonda, int[] delta){
 
-        // A sonda sai da posição anterior
+        Sonda sondaPerdida;
+
         planeta[sonda.posicaoX][sonda.posicaoY] = 0;
 
         geraNovaPosicao(sonda, delta);
@@ -164,6 +149,11 @@ public class Mars {
             }
             else{
                 Utils.print("PERDEMOS A COMUNICAÇÃO DA SONDA " + sonda.id + " E DA SONDA " + planeta[sonda.posicaoX][sonda.posicaoY]);
+                
+                sondaPerdida = Utils.getSondaById(planeta[sonda.posicaoX][sonda.posicaoY], sondas);
+                sondaPerdida.desativaSonda();
+                sonda.desativaSonda();
+
                 planeta[sonda.posicaoX][sonda.posicaoY] = 0;
             }
         }
@@ -197,8 +187,41 @@ public class Mars {
             novaPosX = 0;
         }
 
-        sonda.posicaoX = novaPosX;
-        sonda.posicaoY = novaPosY;
+        sonda.alteraPosicao(novaPosX, novaPosY);
+    }
+
+    /*
+    Função: mostraPlaneta
+    Imprime no console o estado atual do planeta com as sondas posicionadas e informando o código de cada sonda.
+    */
+    public void mostraPlaneta(){
+        Utils.printMatriz(planeta);
+    }
+
+
+    /*
+    Função: mostraSondas
+    Imprime no Console o status de todas Sondas colocadas no planeta, caso a sonda não esteja desaparecida, imprime as coordenadas e a direção.
+    */
+    public void mostraSondas(){
+        int[] coords;
+        for(Sonda sonda : sondas){
+            if( sonda.ativa ){
+                coords = Utils.matrizToCartesiano(sonda.posicaoX, sonda.posicaoY, planeta.length);
+                Utils.print("Sonda : " + sonda.id + " com coordenadas " + coords[0] + " " + coords[1] + " " + direcoesPossiveis[sonda.direcao] );
+            }
+            else{
+                Utils.print("Sonda : " + sonda.id + " desativada.");
+            }
+        }
+    }
+
+    /*
+    Função: prepararTerreno
+    Ajusta um array 2d conforme a quantidade de linhas e colunas passadas. Esse array será usado como uma base para os movimentos das sondas.
+    */
+    public void prepararTerreno(int linhas, int colunas){
+        planeta = new int[linhas][colunas];
     }
 
     /*

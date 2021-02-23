@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Utils {
@@ -52,6 +53,28 @@ public class Utils {
     static boolean conseguiuEscapar(){
         Random rand = new Random();
         return rand.nextBoolean();
+    }
+
+    /*
+    Função: matrizToCartesiano
+    Retorna um array de duas posições contendo as coordenadas no plano cartesiano com base em uma coordenada de um elemento matricial.
+    */
+    static int[] matrizToCartesiano(int posX, int posY, int tam){
+        int[] coords = new int[] {posY, tam - posX - 1};
+        return coords;
+    }
+
+    /*
+    Função: getSondaById
+    Retorna um objeto do tipo Sonda correspondente ao ID passado, caso não exista retorna um objeto contendo todos valores -1 por padrão.
+    */
+    static Sonda getSondaById(int id, ArrayList<Sonda> sondas){
+        for(Sonda sonda : sondas){
+            if(sonda.id == id){
+                return sonda;
+            }
+        }
+        return new Sonda(-1, -1, -1, -1);
     }
 
 }

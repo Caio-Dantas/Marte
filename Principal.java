@@ -15,11 +15,11 @@ public class Principal{
         colunas = scan.nextInt();
         linhas = scan.nextInt();
 
-        Mars marte = new Mars(colunas, linhas);
+        Mars marte = new Mars(colunas + 1, linhas + 1);
 
         while(conexaoSondas){
 
-            System.out.println("Insira o comando que deseja executar: (adicionar, mover, mostrar, sair)");
+            System.out.println("Insira o comando que deseja executar: (adicionar, mover, planeta, sondas, sair)");
             comando = scan.next();
             
             if(comando.equalsIgnoreCase("adicionar")){
@@ -46,8 +46,12 @@ public class Principal{
                 }
             }
 
-            else if(comando.equalsIgnoreCase("mostrar")){
-                marte.mostrePlaneta();
+            else if(comando.equalsIgnoreCase("planeta")){
+                marte.mostraPlaneta();
+            }
+
+            else if(comando.equalsIgnoreCase("sondas")){
+                marte.mostraSondas();
             }
 
             else if(comando.equalsIgnoreCase("sair")){
