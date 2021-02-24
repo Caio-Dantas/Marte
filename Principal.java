@@ -12,14 +12,24 @@ public class Principal{
         boolean conexaoSondas = true;
 
         Utils.print("Insira as coordenadas do canto superior direito:");
+
+        while(!scan.hasNextInt()){
+            scan.nextLine();
+            Utils.print("Insira um número válido.");
+        }
         colunas = scan.nextInt();
+
+        while(!scan.hasNextInt()){
+            scan.nextLine();
+            Utils.print("Insira um número válido.");
+        }
         linhas = scan.nextInt();
 
         Mars marte = new Mars(colunas + 1, linhas + 1);
 
         while(conexaoSondas){
 
-            System.out.println("Insira o comando que deseja executar: (adicionar, mover, planeta, sondas, sair)");
+            System.out.println("Insira o comando que deseja executar: (adicionar, mover, mapa, relatório, sair)");
             comando = scan.next();
             
             if(comando.equalsIgnoreCase("adicionar")){
@@ -46,11 +56,11 @@ public class Principal{
                 }
             }
 
-            else if(comando.equalsIgnoreCase("planeta")){
+            else if(comando.equalsIgnoreCase("mapa")){
                 marte.mostraPlaneta();
             }
 
-            else if(comando.equalsIgnoreCase("sondas")){
+            else if(comando.equalsIgnoreCase("relatório") || comando.equalsIgnoreCase("relatorio")){
                 marte.mostraSondas();
             }
 
