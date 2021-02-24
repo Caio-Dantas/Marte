@@ -79,7 +79,7 @@ public class Mars {
     Função: traduzComando
     Retorno um array de duas posições contendo o deslocamento que deve ser feito em cada um dos eixos com base na direção atual da sonda.
     */
-    public int[] traduzComando(Sonda sonda){
+    private int[] traduzComando(Sonda sonda){
 
         int indexDirecao;
         char direcao;
@@ -106,7 +106,7 @@ public class Mars {
     Função: alteraDirecao
     Altera a direção da sonda para esquerda ou para direita e define a nova direção com base na direção anterior da sonda.
     */
-    public void alteraDirecao(char comando, Sonda sonda){
+    private void alteraDirecao(char comando, Sonda sonda){
 
         int direcao = sonda.direcao;
 
@@ -127,7 +127,7 @@ public class Mars {
     Função: moveSonda
     Define a nova posição da sonda com base em um array de 2 posições passado contendo o deslocamento a ser realizado.
     */
-    public void moveSonda(Sonda sonda, int[] delta){
+    private void moveSonda(Sonda sonda, int[] delta){
 
         Sonda sondaPerdida;
 
@@ -163,7 +163,7 @@ public class Mars {
     Função: geraNovaPosicao
     Define uma nova localização dentro do planeta com base na posição anterior e no deslocamento a ser feito.
     */
-    public void geraNovaPosicao(Sonda sonda, int[] delta){
+    private void geraNovaPosicao(Sonda sonda, int[] delta){
 
         int novaPosX, novaPosY;
 
@@ -220,7 +220,7 @@ public class Mars {
     Função: prepararTerreno
     Ajusta um array 2d conforme a quantidade de linhas e colunas passadas. Esse array será usado como uma base para os movimentos das sondas.
     */
-    public void prepararTerreno(int linhas, int colunas){
+    private void prepararTerreno(int linhas, int colunas){
         planeta = new int[linhas][colunas];
     }
 
