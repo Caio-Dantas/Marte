@@ -53,6 +53,7 @@ public class Mars {
         
         int[] movimento;
         Sonda novaSonda;
+        direcao = Character.toUpperCase(direcao);
 
         novaSonda = Utils.getSondaById(codigo, sondas);
         if(novaSonda.id == -1){
