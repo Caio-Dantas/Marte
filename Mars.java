@@ -141,7 +141,7 @@ public class Mars {
         }
         else{
             Utils.print("ERRO");
-            Utils.print("HOUVE UMA COLISÃO!");
+            Utils.print("COLISÃO IMINENTE!");
             Utils.print("ABORTAR MISSÂO");
             if(Utils.conseguiuEscapar()){
                 Utils.print("O PILOTO DESVIOU E SAIU ILESO");
