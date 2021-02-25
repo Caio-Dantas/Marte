@@ -17,13 +17,13 @@ public class Principal{
             scan.nextLine();
             Utils.print("Insira um número válido.");
         }
-        colunas = scan.nextInt();
+        linhas = scan.nextInt();
 
         while(!scan.hasNextInt()){
             scan.nextLine();
             Utils.print("Insira um número válido.");
         }
-        linhas = scan.nextInt();
+        colunas = scan.nextInt();
 
         Mars marte = new Mars(colunas + 1, linhas + 1);
 
