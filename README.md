@@ -38,6 +38,7 @@ Abra as configurações do Visual Studio Code no modo texto e insira a seguinte 
 Abra o arquivo **Tests.java** e execute os testes
 
 ![Run Tests](./images/testVS.png "Run Tests")
+
 Imagem retirada do site oficial do VSCode.
 
 ## Interação
