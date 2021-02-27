@@ -15,13 +15,13 @@ public class Mars {
     */
     public void adicionaSonda(int coordenadaX, int coordenadaY, char direcaoInicial, int codigo){
         
-        int posX, posY, direcao, posXCartesiano;
+        int direcao, posX, posY;
+        int[] coords;
 
-        posX = coordenadaY;
-        posY = coordenadaX;
+        coords = Utils.cartesianoToMatriz(coordenadaX, coordenadaY, planeta.length);
 
-        // Adaptação de uma abordagem matricial para uma abordagem cartesiana
-        posXCartesiano = planeta.length - posX - 1;
+        posX = coords[0];
+        posY = coords[1];
         
         if(Utils.getSondaById(codigo, sondas).id != -1){
             Utils.print("Já existe uma sonda com esse código.");
@@ -34,15 +34,15 @@ public class Mars {
             return;
         }
 
-        if(planeta[posXCartesiano][posY] == 0){
-            planeta[posXCartesiano][posY] = codigo;
+        if(planeta[posX][posY] == 0){
+            planeta[posX][posY] = codigo;
         }
         else{
             Utils.print("Já existe uma sonda nessa posição.");
             return;
         }
 
-        sondas.add(new Sonda(codigo, posXCartesiano, posY, direcao));
+        sondas.add(new Sonda(codigo, posX, posY, direcao));
     }
 
     /*

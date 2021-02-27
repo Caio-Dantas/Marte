@@ -65,6 +65,18 @@ public class Utils {
     }
 
     /*
+    Função: cartesianoToMatriz
+    Retorna um array de duas posições contendo as coordenadas em formato matricial com base nas coordenadas do plano cartesiano.
+    */
+    static int[] cartesianoToMatriz(int coordX, int coordY, int tam){
+        int posXMatriz, posYMatriz;
+        posXMatriz = tam - coordY - 1;
+        posYMatriz = coordX;
+
+        return new int[] {posXMatriz, posYMatriz};
+    }
+
+    /*
     Função: getSondaById
     Retorna um objeto do tipo Sonda correspondente ao ID passado, caso não exista retorna um objeto contendo todos valores -1 por padrão.
     */
