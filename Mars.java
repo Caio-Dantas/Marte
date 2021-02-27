@@ -77,16 +77,34 @@ public class Mars {
     }
 
     /*
+    Função: alteraDirecao
+    Altera a direção da sonda para esquerda ou para direita e define a nova direção com base na direção anterior da sonda.
+    */
+    private void alteraDirecao(char comando, Sonda sonda){
+
+        int direcao = sonda.direcao;
+
+        if(comando == 'R'){
+            direcao++;
+            direcao = direcao % direcoesPossiveis.length;
+        }
+        else{
+            direcao--;
+            if(direcao < 0){
+                direcao = direcoesPossiveis.length - 1;
+            }
+        }
+        sonda.alteraDirecao(direcao);
+    }
+
+    /*
     Função: traduzComando
     Retorno um array de duas posições contendo o deslocamento que deve ser feito em cada um dos eixos com base na direção atual da sonda.
     */
     private int[] traduzComando(Sonda sonda){
 
-        int indexDirecao;
         char direcao;
-
-        indexDirecao = sonda.direcao;
-        direcao = direcoesPossiveis[indexDirecao];
+        direcao = direcoesPossiveis[sonda.direcao];
 
         switch(direcao){
             case 'N':
@@ -100,28 +118,6 @@ public class Mars {
             default:
                 return new int[] {0,0};
         }
-        
-    }
-
-    /*
-    Função: alteraDirecao
-    Altera a direção da sonda para esquerda ou para direita e define a nova direção com base na direção anterior da sonda.
-    */
-    private void alteraDirecao(char comando, Sonda sonda){
-
-        int direcao = sonda.direcao;
-
-        if(comando == 'R'){
-            direcao++;
-            direcao = direcao % 4;
-        }
-        else{
-            direcao--;
-            if(direcao == -1){
-                direcao = 3;
-            }
-        }
-        sonda.alteraDirecao(direcao);
     }
 
     /*
@@ -143,10 +139,13 @@ public class Mars {
             Utils.print("ERRO");
             Utils.print("COLISÃO IMINENTE!");
             Utils.print("ABORTAR MISSÂO");
+
             if(Utils.conseguiuEscapar()){
                 Utils.print("O PILOTO DESVIOU E SAIU ILESO");
+
                 geraNovaPosicao(sonda, delta);
                 planeta[sonda.posicaoX][sonda.posicaoY] = sonda.id;
+
             }
             else{
                 Utils.print("PERDEMOS A COMUNICAÇÃO DA SONDA " + sonda.id + " E DA SONDA " + planeta[sonda.posicaoX][sonda.posicaoY]);
@@ -198,7 +197,6 @@ public class Mars {
     public void mostraPlaneta(){
         Utils.printMatriz(planeta);
     }
-
 
     /*
     Função: mostraSondas
