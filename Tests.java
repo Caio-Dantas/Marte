@@ -18,21 +18,25 @@ public class Tests {
     /*
     Teste: testaDeslocamento
     Verifica a posição da sonda após a movimentação, utiliza as coordenadas em formato CARTESIANO.
+    N = 0,
+    E = 1,
+    S = 2,
+    W = 3
     */
     @Test
     public void testaDeslocamento(){
 
-        assertArrayEquals(new Object[] {0,1, 'N'}, preparaTeste(0, 0, 4, 4, 'N', "M"));
-        assertArrayEquals(new Object[] {0,9, 'S'}, preparaTeste(0, 10, 10, 10, 'S', "M"));
-        assertArrayEquals(new Object[] {0,0, 'N'}, preparaTeste(0, 0, 4, 0, 'N', "M"));
-        assertArrayEquals(new Object[] {1,0, 'W'}, preparaTeste(0, 0, 4, 0, 'E', "MLL"));
-        assertArrayEquals(new Object[] {4,4, 'E'}, preparaTeste(4, 4, 4, 4, 'E', "RRLL"));
-        assertArrayEquals(new Object[] {1,3, 'N'}, preparaTeste(1, 2, 5, 5, 'N', "LMLMLMLMM"));
-        assertArrayEquals(new Object[] {5,1, 'E'}, preparaTeste(3, 3, 5, 5, 'E', "MMRMMRMRRM"));
-        assertArrayEquals(new Object[] {0,0, 'E'}, preparaTeste(5, 5, 5, 5, 'N', "MRM"));
-        assertArrayEquals(new Object[] {3,5, 'N'}, preparaTeste(0, 0, 3, 5, 'S', "LLMMMMRMMMLM"));
-        assertArrayEquals(new Object[] {1,2, 'S'}, preparaTeste(0, 0, 1, 4, 'W', "LMMLMRM"));
-        assertArrayEquals(new Object[] {4,4, 'N'}, preparaTeste(4, 4, 5, 5, 'N', "RMMMMMML"));
+        assertArrayEquals(new Object[] {0,1, 0}, preparaTeste(0, 0, 4, 4, 'N', "M"));
+        assertArrayEquals(new Object[] {0,9, 2}, preparaTeste(0, 10, 10, 10, 'S', "M"));
+        assertArrayEquals(new Object[] {0,0, 0}, preparaTeste(0, 0, 4, 0, 'N', "M"));
+        assertArrayEquals(new Object[] {1,0, 3}, preparaTeste(0, 0, 4, 0, 'E', "MLL"));
+        assertArrayEquals(new Object[] {4,4, 1}, preparaTeste(4, 4, 4, 4, 'E', "RRLL"));
+        assertArrayEquals(new Object[] {1,3, 0}, preparaTeste(1, 2, 5, 5, 'N', "LMLMLMLMM"));
+        assertArrayEquals(new Object[] {5,1, 1}, preparaTeste(3, 3, 5, 5, 'E', "MMRMMRMRRM"));
+        assertArrayEquals(new Object[] {0,0, 1}, preparaTeste(5, 5, 5, 5, 'N', "MRM"));
+        assertArrayEquals(new Object[] {3,5, 0}, preparaTeste(0, 0, 3, 5, 'S', "LLMMMMRMMMLM"));
+        assertArrayEquals(new Object[] {1,2, 2}, preparaTeste(0, 0, 1, 4, 'W', "LMMLMRM"));
+        assertArrayEquals(new Object[] {4,4, 0}, preparaTeste(4, 4, 5, 5, 'N', "RMMMMMML"));
     }
 
 
@@ -51,8 +55,8 @@ public class Tests {
             marte.processaInput(charComando, 1);
         }
         sondaTeste = marte.sondas.get(0);
-        posFinal = Utils.matrizToCartesiano(sondaTeste.posicaoX, sondaTeste.posicaoY, posYLimite + 1);
+        posFinal = Utils.matrizToCartesiano(sondaTeste.getPosX(), sondaTeste.getPosY(), posYLimite + 1);
 
-        return new Object[] {posFinal[0], posFinal[1], marte.direcoesPossiveis[sondaTeste.direcao] };
+        return new Object[] {posFinal[0], posFinal[1], sondaTeste.getDirecao() };
     }
 }

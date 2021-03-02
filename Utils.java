@@ -82,7 +82,7 @@ public class Utils {
     */
     static Sonda getSondaById(int id, ArrayList<Sonda> sondas){
         for(Sonda sonda : sondas){
-            if(sonda.id == id){
+            if(sonda.getId() == id){
                 return sonda;
             }
         }

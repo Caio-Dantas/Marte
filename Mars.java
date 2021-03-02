@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 public class Mars {
 
-    int[][] planeta;
-    char[] direcoesPossiveis = {'N', 'E', 'S', 'W'};
+    private int[][] planeta;
+    private char[] direcoesPossiveis = {'N', 'E', 'S', 'W'};
     
     ArrayList<Sonda> sondas = new ArrayList<Sonda>();
 
@@ -23,7 +23,7 @@ public class Mars {
         posX = coords[0];
         posY = coords[1];
         
-        if(Utils.getSondaById(codigo, sondas).id != -1){
+        if(Utils.getSondaById(codigo, sondas).getId() != -1){
             Utils.print("Já existe uma sonda com esse código.");
             return;
         }
@@ -56,12 +56,12 @@ public class Mars {
         direcao = Character.toUpperCase(direcao);
 
         novaSonda = Utils.getSondaById(codigo, sondas);
-        if(novaSonda.id == -1){
+        if(novaSonda.getId() == -1){
             Utils.print("Insira um código válido ou adicione uma nova sonda.");
             return;
         }
         // Não processa os movimentos após a sonda ser desativada
-        if(!novaSonda.ativa){
+        if(!novaSonda.isAtiva()){
             return;
         }
         if(direcao == 'L' || direcao == 'R'){
@@ -82,7 +82,7 @@ public class Mars {
     */
     private void alteraDirecao(char comando, Sonda sonda){
 
-        int direcao = sonda.direcao;
+        int direcao = sonda.getDirecao();
 
         if(comando == 'R'){
             direcao++;
@@ -104,7 +104,7 @@ public class Mars {
     private int[] traduzComando(Sonda sonda){
 
         char direcao;
-        direcao = direcoesPossiveis[sonda.direcao];
+        direcao = direcoesPossiveis[sonda.getDirecao()];
 
         switch(direcao){
             case 'N':
@@ -128,12 +128,12 @@ public class Mars {
 
         Sonda sondaPerdida;
 
-        planeta[sonda.posicaoX][sonda.posicaoY] = 0;
+        planeta[sonda.getPosX()][sonda.getPosY()] = 0;
 
         geraNovaPosicao(sonda, delta);
 
-        if(planeta[sonda.posicaoX][sonda.posicaoY] == 0){
-            planeta[sonda.posicaoX][sonda.posicaoY] = sonda.id;
+        if(planeta[sonda.getPosX()][sonda.getPosY()] == 0){
+            planeta[sonda.getPosX()][sonda.getPosY()] = sonda.getId();
         }
         else{
             Utils.print("ERRO");
@@ -144,17 +144,17 @@ public class Mars {
                 Utils.print("O PILOTO DESVIOU E SAIU ILESO");
 
                 geraNovaPosicao(sonda, delta);
-                planeta[sonda.posicaoX][sonda.posicaoY] = sonda.id;
+                planeta[sonda.getPosX()][sonda.getPosY()] = sonda.getId();
 
             }
             else{
-                Utils.print("PERDEMOS A COMUNICAÇÃO DA SONDA " + sonda.id + " E DA SONDA " + planeta[sonda.posicaoX][sonda.posicaoY]);
+                Utils.print("PERDEMOS A COMUNICAÇÃO DA SONDA " + sonda.getId()+ " E DA SONDA " + planeta[sonda.getPosX()][sonda.getPosY()]);
                 
-                sondaPerdida = Utils.getSondaById(planeta[sonda.posicaoX][sonda.posicaoY], sondas);
+                sondaPerdida = Utils.getSondaById(planeta[sonda.getPosX()][sonda.getPosY()], sondas);
                 sondaPerdida.desativaSonda();
                 sonda.desativaSonda();
 
-                planeta[sonda.posicaoX][sonda.posicaoY] = 0;
+                planeta[sonda.getPosX()][sonda.getPosY()] = 0;
             }
         }
     }
@@ -167,8 +167,8 @@ public class Mars {
 
         int novaPosX, novaPosY;
 
-        novaPosX = sonda.posicaoX + delta[0];
-        novaPosY = sonda.posicaoY + delta[1];
+        novaPosX = sonda.getPosX() + delta[0];
+        novaPosY = sonda.getPosY() + delta[1];
 
         // Caso ultrapasse para esquerda move para a última coluna
         if(novaPosY < 0){
@@ -205,12 +205,12 @@ public class Mars {
     public void mostraSondas(){
         int[] coords;
         for(Sonda sonda : sondas){
-            if( sonda.ativa ){
-                coords = Utils.matrizToCartesiano(sonda.posicaoX, sonda.posicaoY, planeta.length);
-                Utils.print("Sonda : " + sonda.id + " com coordenadas " + coords[0] + " " + coords[1] + " " + direcoesPossiveis[sonda.direcao] );
+            if( sonda.isAtiva() ){
+                coords = Utils.matrizToCartesiano(sonda.getPosX(), sonda.getPosY(), planeta.length);
+                Utils.print("Sonda : " + sonda.getId() + " com coordenadas " + coords[0] + " " + coords[1] + " " + direcoesPossiveis[sonda.getDirecao()] );
             }
             else{
-                Utils.print("Sonda : " + sonda.id + " desativada.");
+                Utils.print("Sonda : " + sonda.getId() + " desativada.");
             }
         }
     }
