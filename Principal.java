@@ -1,31 +1,39 @@
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Principal{
-    
+
     public static void main(String[] args) {
 
         Scanner scan = new Scanner(System.in); 
+        Printer printer = new Printer();
+        TraduzInput tradutor = new TraduzInput();
+
+        Optional<Comandos> optComando;
+        Optional<Direcao> direcao;
+        Posicao pos;
+        Planeta marte;
 
         int linhas, colunas, coordX, coordY, ID;
-        char direcao;
+        char charDirecao;
         String comando = "", movimentacao = "";
         boolean conexaoSondas = true;
 
-        Utils.print("Insira as coordenadas do canto superior direito:");
+        printer.print("Insira as coordenadas do canto superior direito:");
 
         while(!scan.hasNextInt()){
             scan.nextLine();
-            Utils.print("Insira um número válido.");
+            printer.print("Insira um número válido.");
         }
         linhas = scan.nextInt();
 
         while(!scan.hasNextInt()){
             scan.nextLine();
-            Utils.print("Insira um número válido.");
+            printer.print("Insira um número válido.");
         }
         colunas = scan.nextInt();
 
-        Mars marte = new Mars(colunas + 1, linhas + 1);
+        marte = new Planeta(colunas + 1, linhas + 1);
 
         while(conexaoSondas){
 
@@ -33,26 +41,41 @@ public class Principal{
             comando = scan.next();
             
             if(comando.equalsIgnoreCase("adicionar")){
-                Utils.print("Insira as coordenadas da sonda e a orientação: EX: 1 2 N");
+                printer.print("Insira as coordenadas da sonda e a orientação: EX: 1 2 N");
                 coordX = scan.nextInt();
                 coordY = scan.nextInt();
-                direcao = Character.toUpperCase(scan.next().charAt(0));
+                charDirecao = Character.toUpperCase(scan.next().charAt(0));
 
-                Utils.print("Insira o ID da sonda");
-                ID = scan.nextInt();
+                direcao = tradutor.novaDirecao(charDirecao);
+                if(!direcao.isPresent()){
+                    printer.print("Direção Inválida");
+                }
+                else{
+    
+                    printer.print("Insira o ID da sonda");
+                    ID = scan.nextInt();
+                    pos = new Posicao(coordX, coordY);
+    
+                    marte.adicionaSonda(pos, direcao.get(), ID);
 
-                marte.adicionaSonda(coordX, coordY, direcao, ID);
+                }
             }
 
             else if(comando.equalsIgnoreCase("mover")){
-                Utils.print("Insira os ID da sonda que deseja mover:");
+                printer.print("Insira os ID da sonda que deseja mover:");
                 ID = scan.nextInt();
 
-                Utils.print("Insira os comandos de movimentação da sonda:");
+                printer.print("Insira os comandos de movimentação da sonda:");
                 movimentacao = scan.next();
 
                 for(char mov : movimentacao.toCharArray()){
-                    marte.processaInput(mov, ID);
+                    optComando = tradutor.novoComando(mov);
+                    if(optComando.isPresent()){
+                        marte.processaInput(optComando.get(), ID);
+                    }
+                    else{
+                        printer.print("Insira uma direção válida.");
+                    }
                 }
             }
 
@@ -65,7 +88,7 @@ public class Principal{
             }
 
             else if(comando.equalsIgnoreCase("sair")){
-                Utils.print("Câmbio Desligo");
+                printer.print("Câmbio Desligo");
                 conexaoSondas = false;
             }
             
