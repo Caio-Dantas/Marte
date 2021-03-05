@@ -19,6 +19,28 @@ javac *.java
 java Principal
 ```
 
+#### Testes
+
+Para executar os testes você deve ter os seguintes recursos:
+
+- [JUnit](https://search.maven.org/search?q=g:junit%20AND%20a:junit)
+- [VS Code](https://code.visualstudio.com/download)
+
+Abra as configurações do Visual Studio Code no modo texto e insira a seguinte configuração:
+
+```
+"java.project.referencedLibraries": [
+		"lib/**/*.jar",
+		"path/to/junit/.jar"
+	]
+```
+
+Abra o arquivo **Tests.java** e execute os testes
+
+![Run Tests](./images/testVS.png "Run Tests")
+
+Imagem retirada do site oficial do VSCode.
+
 ## Interação
 
 ##### Tamanho do Planeta
